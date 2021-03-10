@@ -13,7 +13,7 @@ Subsequently, run the following lines to get relevant sentences of anaxiety outc
 ```
 de=data_extraction('/home/xyz/data_extraction/')   
 de.build_training_data()       
-de.data_extraction()
+de.sentence_classification()
 ```
 
 An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
