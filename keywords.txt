@@ -1,0 +1,39 @@
+systematic displacement error
+random displacement error
+systematic random displacement error
+rotational random systematic error
+translational random systematic setup error
+x y z direction rotational
+x y z direction translational
+x y z correction rotational
+x y z correction translational 
+translation discrepanciestranslation discrepancy 
+translational discrepancy
+translational discrepancies
+rotational discrepancy
+rotational discrepancies
+rotation translation error
+rotation translation discrepancy
+rotation translation discrepancies
+rotation translation displacement
+mean set up error
+geometric organ error
+standard deviation of set up error
+population systematic error
+population random error
+organ motion translation
+organ motion rotation
+set up error translation
+set up error rotation
+translational correction
+rotational correction
+vector correction
+residual error
+total error mean or SD
+total error mean or standard deviation
+rotational systematic error
+translational systematic error
+rotational random error
+translational random error
+systematic and random population error
+anterior posterior inferior superior
