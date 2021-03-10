@@ -227,6 +227,7 @@ class data_extraction():
     
 # TFIDF model    
      def tfidf_training_model(self,trn_data,trn_cat):
+        print('\n ***** Building TF-IDF Based Training Model ***** \n')
         clf,clf_parameters,ext2=self.classification_pipeline() 
         print('No terms \t'+str(self.no_of_selected_terms))
         if self.no_of_selected_terms==None:                                  # To use all the terms of the vocabulary
@@ -260,7 +261,7 @@ class data_extraction():
 
 # Doc2Vec model    
      def doc2vec_training_model(self,ln,trn_data,trn_cat):
-        print('\n ***** Building Doc2Vec Training Model ***** \n')
+        print('\n ***** Building Doc2Vec Based Training Model ***** \n')
         tagged_data = [TaggedDocument(words=nltk.word_tokenize(_d.lower()), tags=[str(i)]) for i, _d in enumerate(trn_data)]
         max_epochs = 10       
         trn_model = Doc2Vec(vector_size=int(ln),alpha=0.025,min_alpha=0.00025,min_count=1,dm =1)
@@ -313,9 +314,9 @@ class data_extraction():
             num+=1   
         return predicted
      
-# LogEntropy model    
-     def logentropy_training_model(self,trn_data,trn_cat): 
-        print('\n ***** Building LogEntropy Training Model ***** \n')
+# Entropy model    
+     def entropy_training_model(self,trn_data,trn_cat): 
+        print('\n ***** Building Entropy Based Training Model ***** \n')
         trn_vec=[]; trn_sentences=[]; 
         for sentence in trn_data:
             sentence=nltk.word_tokenize(sentence.lower())
@@ -326,7 +327,7 @@ class data_extraction():
         no_of_terms=len(trn_dct.keys())
         for item in corpus:
             vec=[0]*no_of_terms                                 # Empty vector of terms for a document
-            vector = trn_model[item]                            # LogEntropy Vectors
+            vector = trn_model[item]                            # Entropy based vectors
             for elm in vector:
                 vec[elm[0]]=elm[1]
             trn_vec.append(vec)
@@ -400,8 +401,8 @@ class data_extraction():
    # Calling the training model
             if self.model=='tfidf':
                 clf,ext2=self.tfidf_training_model(trn_data,trn_cat)
-            elif self.model=='logentropy':
-                clf,ext2,trn_dct,trn_model=self.logentropy_training_model(trn_data,trn_cat)
+            elif self.model=='entropy':
+                clf,ext2,trn_dct,trn_model=self.entropy_training_model(trn_data,trn_cat)
             elif self.model=='doc2vec':
                 clf,ext2,trn_model=self.doc2vec_training_model(ln,trn_data,trn_cat)
             print('\n ***** Processing Test Samples ***** \n')
