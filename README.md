@@ -1,4 +1,4 @@
-# A-Sentence-Classification-Framework-to-Identify-Geometric-Errors-in-Radiation-Therapy-from-Relevant-
+# A Sentence Classification Framework to Identify Geometric Errors in Radiation Therapy from Relevant Literature
 The aim of this project is to build a framework using machine learning to extract required data elements of geometric errors of radiotherapy from relevant literaure. The framework builds a training corpus by extracting senetnces containing different data elements of geometric errors of radiotherapy from relevant publications by using some keywords fixed by the domain expert. The articles are retrieved from PubMED following a given set of rules by the domain expert. Subsequently, the method trains a machine learning classifier e.g., Support Vector Machine using this training corpus to extract the sentences containing desired geometric errors from test documents. The experiments are conducted on 60 publications to automatically extract the sentences containing geometric errors of radiotherapy.  
 
 ## Prerequsites
