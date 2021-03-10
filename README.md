@@ -11,7 +11,7 @@ Pass the path of the project e.g., `/home/xyz/data_extraction/` as a parameter o
 Subsequently, run the following lines to get relevant sentences of anaxiety outcome measures for individual test samples. 
 
 ```
-de=data_extraction('/Users/basut/geometric_error_extraction/code/',model='tfidf',clf_opt='s',no_of_selected_terms=1000)  
+de=data_extraction('/home/xyz/data_extraction/',model='tfidf',clf_opt='s',no_of_selected_terms=1000)  
 de.build_training_data()       
 de.sentence_classification()
 ```
@@ -20,7 +20,7 @@ Here model indicates the feature weighting scheme and the options are 'tfidf' fo
 
 ## Contact
 
-For any further query, comment or suggestion, you may reach out to me at welcometanmay [at] gmail.com
+For any further query, comment or suggestion, you may reach out to me at welcometanmay@gmail.com
 
 ## Citation
 ```
