@@ -379,7 +379,7 @@ class data_extraction():
          return {
              'accuracy': acc,
          }     
-# BioBERT model    
+# BioBERT training model    
      def biobert_model(self,trn_data,trn_cat,test_size=0.2,max_length = 512): 
         print('\n ***** Running BioBERT Model ***** \n')       
         model_name = "monologg/biobert_v1.1_pubmed"             # The given BioBERT Model
