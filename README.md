@@ -26,7 +26,7 @@ The following options of `model` are available and the `default` is `entropy`:
 
         'tfidf' for TF-IDF based term weighting scheme 
 
-The options of 'clf_opt' are available and the `default` option is None: 
+The options of 'clf_opt' are available and the `default` option is `None`: 
 
         'lr' for Logistic Regression 
 
@@ -38,7 +38,7 @@ The options of 'clf_opt' are available and the `default` option is None:
 
         's' for Support Vector Machine 
 
-The deafult option of no_of_selected_terms is None, otherwise desired number of terms is needed. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
+The deafult option of no_of_selected_terms is `None`, otherwise desired number of terms is needed. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
 
 ## Contact
 
