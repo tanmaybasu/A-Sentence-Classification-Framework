@@ -370,7 +370,7 @@ class data_extraction():
         print(clf)
         return clf,ext2,trn_dct,trn_model
 
-# BioBERT model  accuracy function
+# BioBERT model accuracy function
      def compute_metrics(self,pred):
          labels = pred.label_ids
          preds = pred.predictions.argmax(-1)
@@ -379,7 +379,8 @@ class data_extraction():
          return {
              'accuracy': acc,
          }     
-# BioBERT training model    
+
+# BioBERT model    
      def biobert_model(self,trn_data,trn_cat,test_size=0.2,max_length = 512): 
         print('\n ***** Running BioBERT Model ***** \n')       
         model_name = "monologg/biobert_v1.1_pubmed"             # The given BioBERT Model
@@ -424,7 +425,7 @@ class data_extraction():
         trainer.train()
         trainer.evaluate()
 
-        model_path = "bert_model_geometric_error"
+        model_path = "biobert_model_geometric_error"
         model.save_pretrained(model_path)
         tokenizer.save_pretrained(model_path)
         return model,tokenizer,class_names
