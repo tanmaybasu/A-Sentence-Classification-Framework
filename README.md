@@ -6,7 +6,7 @@ The aim of this project is to build a framework using machine learning to extrac
 
 ## How to run the framework?
 
-Pass the path of the project e.g., `/home/xyz/data_extraction/` as a parameter of the main class. Create the following directories inside this path: 1) `training_data`, 2) `test_data`. Therefore keep the individual PDFs of training and test data in the respective directories. The list of keywords to build the training data should be stored as `keywords.txt` in the main project path. Create a directory, called, `output` in the main project path to store the outputs of individual test samples. 
+Pass the path of the project e.g., `/home/xyz/data_extraction/` as a parameter of the main class in `data_extraction.py`. Create the following directories inside this path: 1) `training_data`, 2) `test_data`. Therefore keep the individual PDFs of training and test data in the respective directories. The list of keywords to build the training data should be stored as `keywords.txt` in the main project path. Create a directory, called, `output` in the main project path to store the outputs of individual test samples. 
 
 Subsequently, run the following lines to get relevant sentences of anaxiety outcome measures for individual test samples. 
 
