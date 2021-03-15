@@ -9,6 +9,8 @@ Created on Saturday December 19 2020 at 16:16:19
 import csv,os,re,sys
 import fitz
 import nltk
+import numpy as np
+import torch
 from nltk import tokenize
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
@@ -20,9 +22,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_selection import SelectKBest,chi2,mutual_info_classif 
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 from gensim.models import LogEntropyModel
 from gensim.corpora import Dictionary
 from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
+from transformers.file_utils import is_tf_available, is_torch_available, is_torch_tpu_available
+from transformers import BertTokenizer, BertTokenizerFast, BertForSequenceClassification
+from transformers import Trainer, TrainingArguments
 
 
 en_stopwords = ['a', 'about', 'above', 'across', 'after', 'again', 'against', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'among', 'an', 'and', 'another', 'any', 'anybody', 'anyone', 'anything', 'anywhere', 'are', 'area', 'areas', 'around', 'as', 'ask', 'asked', 'asking', 'asks', 'at', 'away', 'b', 'back', 'backed', 'backing', 'backs', 'be', 'became', 'because', 'become', 'becomes', 'been', 'before', 'began', 'behind', 'being', 'beings', 'best', 'better', 'between', 'big', 'both', 'but', 'by', 'c', 'came', 'can', 'cannot', 'case', 'cases', 'certain', 'certainly', 'clear', 'clearly', 'come', 'could', 'd', 'did', 'differ', 'different', 'differently', 'do', 'does', 'done', 'down', 'down', 'downed', 'downing', 'downs', 'during', 'e', 'each', 'early', 'either', 'end', 'ended', 'ending', 'ends', 'enough', 'even', 'evenly', 'ever', 'every', 'everybody', 'everyone', 'everything', 'everywhere', 'f', 'face', 'faces', 'fact', 'facts', 'far', 'felt', 'few', 'find', 'finds', 'first', 'for', 'four', 'from', 'full', 'fully', 'further', 'furthered', 'furthering', 'furthers', 'g', 'gave', 'general', 'generally', 'get', 'gets', 'give', 'given', 'gives', 'go', 'going', 'good', 'goods', 'got', 'great', 'greater', 'greatest', 'group', 'grouped', 'grouping', 'groups', 'h', 'had', 'has', 'have', 'having', 'he', 'her', 'here', 'herself', 'high', 'high', 'high', 'higher', 'highest', 'him', 'himself', 'his', 'how', 'however', 'i', 'if', 'important', 'in', 'interest', 'interested', 'interesting', 'interests', 'into', 'is', 'it', 'its', 'itself', 'j', 'just', 'k', 'keep', 'keeps', 'kind', 'knew', 'know', 'known', 'knows', 'l', 'large', 'largely', 'last', 'later', 'latest', 'least', 'less', 'let', 'lets', 'like', 'likely', 'long', 'longer', 'longest', 'm', 'made', 'make', 'making', 'man', 'many', 'may', 'me', 'member', 'members', 'men', 'might', 'more', 'most', 'mostly', 'mr', 'mrs', 'much', 'must', 'my', 'myself', 'n', 'necessary', 'need', 'needed', 'needing', 'needs', 'never', 'new', 'new', 'newer', 'newest', 'next', 'no', 'nobody', 'non', 'noone', 'not', 'nothing', 'now', 'nowhere', 'number', 'numbers', 'o', 'of', 'off', 'often', 'old', 'older', 'oldest', 'on', 'once', 'one', 'only', 'open', 'opened', 'opening', 'opens', 'or', 'order', 'ordered', 'ordering', 'orders', 'other', 'others', 'our', 'out', 'over', 'p', 'part', 'parted', 'parting', 'parts', 'per', 'perhaps', 'place', 'places', 'point', 'pointed', 'pointing', 'points', 'possible', 'present', 'presented', 'presenting', 'presents', 'problem', 'problems', 'put', 'puts', 'q', 'quite', 'r', 'rather', 'really', 'right', 'right', 'room', 'rooms', 's', 'said', 'same', 'saw', 'say', 'says', 'second', 'seconds', 'see', 'seem', 'seemed', 'seeming', 'seems', 'sees', 'several', 'shall', 'she', 'should', 'show', 'showed', 'showing', 'shows', 'side', 'sides', 'since', 'small', 'smaller', 'smallest', 'so', 'some', 'somebody', 'someone', 'something', 'somewhere', 'state', 'states', 'still', 'still', 'such', 'sure', 't', 'take', 'taken', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'therefore', 'these', 'they', 'thing', 'things', 'think', 'thinks', 'this', 'those', 'though', 'thought', 'thoughts', 'three', 'through', 'thus', 'to', 'today', 'together', 'too', 'took', 'toward', 'turn', 'turned', 'turning', 'turns', 'two', 'u', 'under', 'until', 'up', 'upon', 'us', 'use', 'used', 'uses', 'v', 'very', 'w', 'want', 'wanted', 'wanting', 'wants', 'was', 'way', 'ways', 'we', 'well', 'wells', 'went', 'were', 'what', 'when', 'where', 'whether', 'which', 'while', 'who', 'whole', 'whose', 'why', 'will', 'with', 'within', 'without', 'work', 'worked', 'working', 'works', 'would', 'x', 'y', 'year', 'years', 'yet', 'you', 'young', 'younger', 'youngest', 'your', 'yours', 'z']
@@ -31,8 +38,23 @@ for word in nltk_stopwords:
     if word not in en_stopwords:
         en_stopwords.append(word)
 
+# Class for Torch Model
+class get_torch_data_format(torch.utils.data.Dataset):
+    def __init__(self, encodings, labels):
+        self.encodings = encodings
+        self.labels = labels
+
+    def __getitem__(self, idx):
+        item = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
+        item["labels"] = torch.tensor([self.labels[idx]])
+        return item
+
+    def __len__(self):
+        return len(self.labels)
+
+# Main Class
 class data_extraction():
-     def __init__(self,path='/home/data_extrcation/',model='tfidf',clf_opt=None,no_of_selected_terms=None):
+     def __init__(self,path='/home/data_extrcation/',model='entropy',clf_opt=None,no_of_selected_terms=None):
         self.path = path
         self.model = model
         self.clf_opt=clf_opt
@@ -347,7 +369,66 @@ class data_extraction():
         clf= grid.best_estimator_
         print(clf)
         return clf,ext2,trn_dct,trn_model
+
+# BioBERT model  accuracy function
+     def compute_metrics(self,pred):
+         labels = pred.label_ids
+         preds = pred.predictions.argmax(-1)
+         # calculate accuracy using sklearn's function
+         acc = accuracy_score(labels, preds)
+         return {
+             'accuracy': acc,
+         }     
+# BioBERT model    
+     def biobert_model(self,trn_data,trn_cat,test_size=0.2,max_length = 512): 
+        print('\n ***** Running BioBERT Model ***** \n')       
+        model_name = "monologg/biobert_v1.1_pubmed"             # The given BioBERT Model
+        tokenizer = BertTokenizerFast.from_pretrained(model_name, do_lower_case=True) 
         
+        documents=[]; class_labels=[]; 
+        for item in trn_data:
+            documents.append(item)
+        for item in trn_cat:            
+            class_labels.append(item)
+
+        labels=np.asarray(class_labels)     # Class labels in nparray format         
+        (train_texts, valid_texts, train_labels, valid_labels), class_names = train_test_split(documents, labels, test_size=test_size), class_labels
+
+        train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=max_length)
+        valid_encodings = tokenizer(valid_texts, truncation=True, padding=True, max_length=max_length)
+        train_dataset = get_torch_data_format(train_encodings, train_labels)
+        valid_dataset = get_torch_data_format(valid_encodings, valid_labels)
+        model = BertForSequenceClassification.from_pretrained(model_name, num_labels=len(class_names)).to("cpu")
+
+        training_args = TrainingArguments(
+            output_dir='./results',          # output directory
+            num_train_epochs=3,              # total number of training epochs
+            per_device_train_batch_size=16,  # batch size per device during training
+            per_device_eval_batch_size=20,   # batch size for evaluation
+            warmup_steps=500,                # number of warmup steps for learning rate scheduler
+            weight_decay=0.01,               # strength of weight decay
+            logging_dir='./logs',            # directory for storing logs
+            load_best_model_at_end=True,     # load the best model when finished training (default metric is loss)
+            # but you can specify `metric_for_best_model` argument to change to accuracy or other metric
+            logging_steps=200,               # log & save weights each logging_steps
+            evaluation_strategy="steps",     # evaluate each `logging_steps`
+            )
+    
+        trainer = Trainer(
+            model=model,                         # the instantiated Transformers model to be trained
+            args=training_args,                  # training arguments, defined above
+            train_dataset=train_dataset,         # training dataset
+            eval_dataset=valid_dataset,          # evaluation dataset
+            compute_metrics=self.compute_metrics,     # the callback that computes metrics of interest
+            )
+        trainer.train()
+        trainer.evaluate()
+
+        model_path = "bert_model_geometric_error"
+        model.save_pretrained(model_path)
+        tokenizer.save_pretrained(model_path)
+        return model,tokenizer,class_names
+    
 # Classification using the Gold Statndard after creating it from the raw text    
      def sentence_classification(self):
         if self.model=='doc2vec':
@@ -359,7 +440,8 @@ class data_extraction():
         fn=open(self.path+'training_irrelevant_class_data.csv',"r")    
         rel_sent = list(csv.reader(fp,delimiter='\n')) 
         irl_sent = list(csv.reader(fn,delimiter='\n'))
-        
+
+        print('\n ***** Processing Training Documents ***** \n')
     # Getting Relevant Sentences of Training Corpus
         for item in rel_sent:
             text=''.join(item)
@@ -399,13 +481,16 @@ class data_extraction():
             print('There is no test samples in the directory \n')
         else:
    # Calling the training model
+            print('\n ***** Building Training Model ***** \n')
             if self.model=='tfidf':
                 clf,ext2=self.tfidf_training_model(trn_data,trn_cat)
             elif self.model=='entropy':
                 clf,ext2,trn_dct,trn_model=self.entropy_training_model(trn_data,trn_cat)
             elif self.model=='doc2vec':
                 clf,ext2,trn_model=self.doc2vec_training_model(ln,trn_data,trn_cat)
-            print('\n ***** Processing Test Samples ***** \n')
+            elif self.model=='biobert':
+                trn_model,trn_tokenizer,class_names=self.biobert_model(trn_data,trn_cat)                
+            print('\n ***** Processing Test Documents ***** \n')
             for item in tst_files:
                 if item.find('.pdf')>0:             # Checking if it is a PDF file 
                     count+=1
@@ -445,6 +530,15 @@ class data_extraction():
                             inf_vec = trn_model.infer_vector(sentence,epochs=100)
                             tst_vec.append(inf_vec)
                         predicted = clf.predict(tst_vec)
+                    elif self.model=='biobert':
+                        out.write('\n Using BioBERT Model: \n\n') 
+                        predicted=[]
+                        for sentence in tst_data:
+                            inputs = trn_tokenizer(sentence, padding=True, truncation=True, max_length=512, return_tensors="pt").to("cpu") 
+                            outputs = trn_model(**inputs)
+                            probs = outputs[0].softmax(1)
+                            cl=class_names[probs.argmax()]
+                            predicted.append(cl)                            
                     elif self.model=='keyword_matching':
                         out.write('\n Following Keyword Match \n\n') 
                         predicted=self.keyword_matching_model(tst_data)
