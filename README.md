@@ -26,13 +26,13 @@ The following options of `model` are available and the `default` is `entropy`:
 
         'tfidf' for TF-IDF based term weighting scheme 
 
-The options of 'clf_opt' are available and the `default` is `s`: 
+The options of 'clf_opt' are available and the `default` option is None: 
 
         'lr' for Logistic Regression 
 
         'ls' for Linear SVC
 
-        'n' for Naive Bayes
+        'n' for Multinomial Naive Bayes
 
         'r' for Random Forest
 
