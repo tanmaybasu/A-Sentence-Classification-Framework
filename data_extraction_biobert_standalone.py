@@ -3,7 +3,7 @@
 """
 Created on Wed Mar 10 19:10:52 2021
 
-@author: basut
+@author: Tanmay Basu
 """
 
 #!/usr/bin/env python3
@@ -30,7 +30,7 @@ max_length = 512
 model_name = "monologg/biobert_v1.1_pubmed"
 
 tokenizer = BertTokenizerFast.from_pretrained(model_name, do_lower_case=True) 
-path='/Users/basut/geometric_error_extraction/code/'
+path='/home/xyz/data_extraction/'
    
 # PDF to text conversion
 def pdf_to_text(file):        
@@ -229,7 +229,7 @@ trainer = Trainer(
 trainer.train()
 trainer.evaluate()
 
-model_path = "bert_model_geometric_error"
+model_path = "biobert_model_geometric_error"
 model.save_pretrained(model_path)
 tokenizer.save_pretrained(model_path)
 
@@ -277,6 +277,6 @@ def get_prediction(path):
                 print("Total No. of Relevant Sentences of "+item+" : %d\n" %nps)
         print('No of sentences belong to the TEST corpus: '+ str(p3)) 
     
-get_prediction('/Users/basut/geometric_error_extraction/code/')
+get_prediction(path)
 
 
