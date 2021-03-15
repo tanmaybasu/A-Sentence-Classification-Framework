@@ -20,23 +20,23 @@ The following options of `model` are available and the `default` is `entropy`:
 
         'biobert' for BioBERT model
 
-        'entropy' for entropy based term weighting scheme
+        'entropy' for Entropy based term weighting scheme
 
-        'doc2vec' for doc2vec based embeddings 
+        'doc2vec' for Doc2Vec based embeddings 
 
-        'tfidf' for tf-idf based term weighting scheme 
+        'tfidf' for TF-IDF based term weighting scheme 
 
 The options of 'clf_opt' are available and the `default` is `s`: 
 
-        'lr' for logistic regression 
+        'lr' for Logistic Regression 
 
-        'ls' for linear svc
+        'ls' for Linear SVC
 
-        'n' for naive bayes
+        'n' for Naive Bayes
 
-        'r' for random forest
+        'r' for Random Forest
 
-        's' for support vector machine 
+        's' for Support Vector Machine 
 
 The deafult option of no_of_selected_terms is None, otherwise desired number of terms is needed. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
 
