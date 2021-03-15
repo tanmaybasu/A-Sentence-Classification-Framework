@@ -16,20 +16,28 @@ de.build_training_data()
 de.sentence_classification()
 ```
 
-Here model indicates the feature weighting scheme and the options are 
-'tfidf' for tf-idf based scheme, 
-'entropy' for entropy based weighting, 
-'doc2vec' for doc2vec based embeddings, 
-'biobert' for BioBERT model and 
-default option is 'entropy'. 
+The following options of `model` are available and the `default` is `entropy`: 
 
-The options of 'clf_opt' are 
-'lr' for logistic regression, 
-'ls' for linear svc, 
-'n' for naive bayes, 
-'r' for random forest, 
-'s' for support vector machine and 
-default option is 's'. 
+'biobert' for BioBERT model
+
+'entropy' for entropy based weighting 
+
+'doc2vec' for doc2vec based embeddings 
+
+'tfidf' for tf-idf based schem, 
+
+The options of 'clf_opt' are available and the `default` is `s`: 
+
+'lr' for logistic regression 
+
+'ls' for linear svc
+
+'n' for naive bayes
+
+'r' for random forest
+
+'s' for support vector machine 
+
 
 The deafult option of no_of_selected_terms is None, otherwise desired number of terms is needed. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
 
