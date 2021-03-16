@@ -26,7 +26,7 @@ The following options of `model` are available and the `default` is `entropy`:
 
         'tfidf' for TF-IDF based term weighting scheme 
 
-The options of 'clf_opt' are available and the `default` option is `None`: 
+The following options of 'clf_opt' are available and the `default` is `None`: 
 
         'lr' for Logistic Regression 
 
