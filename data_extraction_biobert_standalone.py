@@ -157,14 +157,14 @@ def get_training_data(test_size=0.2):
     reader=list(csv.reader(f1,delimiter='\n'))
     f1.close()
     for item in reader:
-        text=''.join(item)
+        text=''.join(item).split(',')[1]
         documents.append(text)
         class_labels.append(0)
     f2=open(path+'training_irrelevant_class_data.csv', 'r')
     reader=list(csv.reader(f2,delimiter='\n'))
     f2.close()
     for item in reader:
-        text=''.join(item)
+        text=''.join(item).split(',')[1]
         documents.append(text)
         class_labels.append(1)
     labels=np.asarray(class_labels)     # Class labels in nparray format 
