@@ -88,40 +88,20 @@ class data_extraction():
         text=re.sub(r'([a-z0-9])([\n]+)([A-Z])', r'\1\. \3', text)                 # Put a between lowercase letter/number, \n and uppercase letter e.g., xxx5 \n Yyy
         text=re.sub(r'(\.)([\s]*)([\.]+)', r'\1', text)                            # Removing extra '.'s, if any 
         return text
-    
-# Longest Common Subsequence
-     def lcs(self,s1, s2):
-        m = [[0] * (1 + len(s2)) for i in range(1 + len(s1))]
-        longest = 0
-        for x in range(1, 1 + len(s1)):
-            for y in range(1, 1 + len(s2)):
-                if s1[x - 1] == s2[y - 1]:
-                    m[x][y] = m[x - 1][y - 1] + 1
-                    if m[x][y] > longest:
-                        longest = m[x][y]
-                else:
-                    m[x][y] = 0
-        return longest
-        
+
 # Final score calculation
-     def get_sent_score(self,sent,phrase,inp):
+     def get_sent_score(self,sent,phrase):
         sent_tokens = nltk.word_tokenize(sent.lower().strip('.'))
         sent_tokens = [item.rstrip('s') for item in sent_tokens]            # Converting the plurals to singulars  
         target_tokens = nltk.word_tokenize(phrase.lower().strip('.'))              
         target_tokens = [item.rstrip('s') for item in target_tokens]        # Converting the plurals to singulars             
         score = 0   
-    #   Using modified Jaccard Similarity    
-        if inp=='0':                                                        # Jaccard is the default similarity measure
-            for token in target_tokens:
-                if token in sent_tokens and token not in stopwords.words('english'):    # Discarding the stopwords 
-                    score += 1
-            if score!=0:
-                score = float(score)/len(target_tokens)   
-        # Using LCS     
-        else:
-            score=self.lcs(sent_tokens,target_tokens)
-            if score>0:
-                score=score/float(len(target_tokens))     
+        # sent_sim is the similarity measure
+        for token in target_tokens:
+            if token in sent_tokens and token not in stopwords.words('english'):    # Discarding the stopwords 
+                score += 1
+        if score!=0:
+            score = float(score)/len(target_tokens)      
         return score
     
 # Check if a sentence is relevant to the data element 
@@ -130,7 +110,7 @@ class data_extraction():
         sentence = re.sub(r'[^a-zA-Z0-9.?:!$\n]', ' ', sentence)    # Remove special character 
         for phrase in keywords:
             score=0.0;
-            score=self.get_sent_score(sentence,phrase,'0')
+            score=self.get_sent_score(sentence,phrase)
             total_score+=score
             if score>=self.threshold:
                 tmp=[]
@@ -264,7 +244,6 @@ class data_extraction():
                     ('vect', CountVectorizer(token_pattern=r'\b\w+\b')),
                     ('tfidf', TfidfTransformer(use_idf=True,smooth_idf=True)),
                     ('feature_selection', SelectKBest(chi2, k=self.no_of_selected_terms)),                         # k=1000 is recommended 
-            #        ('feature_selection', SelectKBest(mutual_info_classif, k=self.no_of_selected_terms)),        
                     ('clf', clf),]) 
             except:                                  # If the input is wrong
                 print('Wrong Input. Enter number of terms correctly. \n')
@@ -457,8 +436,7 @@ class data_extraction():
                 sentences = tokenize.sent_tokenize(text)
                 for sentence in sentences:
                     sentence.rstrip('.|?|\)|\]|\'|\"|;|`')
-# The stopwords should not be removed as many sentences are small and removing stopwords may devitate the performance 
-#                    sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords]) # Stopword removal                                        
+                    sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords]) # Stopword removal                                        
                     sentence=re.sub(r'\d+\.\d+', '', sentence)          # Remove floating point numbers
                     trn_data.append(sentence)           
                     trn_cat.append(1)
@@ -487,7 +465,7 @@ class data_extraction():
             for item in tst_files:
                 if item.find('.pdf')>0:             # Checking if it is a PDF file 
                     count+=1
-                    tst_data=[]; tst_cleaned_data=[]; tst_vec=[]; tst_sentences=[] 
+                    tst_data=[]; tst_data_cleaned=[]; tst_vec=[]; tst_sentences=[] 
                     print(item.lower().rstrip('.pdf'))
                     out = open(self.path+'output/'+item.lower().rstrip('.pdf')+'.txt',"w")   # Output file 
                     text=self.pdf_to_text(self.path+'test_data/'+item) 
@@ -495,17 +473,16 @@ class data_extraction():
                     sentences = tokenize.sent_tokenize(text)
                     for sentence in sentences:                          # Extracting sentences
                         tst_data.append(sentence)  
-# The stopwords should not be removed as many sentences are small and removing stopwords may devitate the performance 
-#                        sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords])
-                        tst_cleaned_data.append(sentence)                        
+                        sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords])
+                        tst_data_cleaned.append(sentence)                        
                         p3=p3+1
     # Classification of the test samples 
                     if self.model=='tfidf':
                         out.write('\n Using '+ext2+' Classifier: \n\n') 
-                        predicted = clf.predict(tst_cleaned_data) 
+                        predicted = clf.predict(tst_data_cleaned) 
                     elif self.model=='entropy':
                         out.write('\n Using '+ext2+' Classifier: \n\n') 
-                        for sentence in tst_cleaned_data:
+                        for sentence in tst_data_cleaned:
                             sentence=nltk.word_tokenize(sentence.lower()) 
                             tst_sentences.append(sentence)                                
                         corpus = [trn_dct.doc2bow(row) for row in tst_sentences]     
@@ -519,7 +496,7 @@ class data_extraction():
                         predicted = clf.predict(tst_vec) 
                     elif self.model=='doc2vec':
                         out.write('\n Using '+ext2+' Classifier: \n\n') 
-                        for sentence in tst_cleaned_data:
+                        for sentence in tst_data_cleaned:
                             sentence=nltk.word_tokenize(sentence.lower())
                             inf_vec = trn_model.infer_vector(sentence,epochs=100)
                             tst_vec.append(inf_vec)
@@ -527,7 +504,7 @@ class data_extraction():
                     elif self.model=='bert':
                         out.write('\n Using BERT Model: \n\n') 
                         predicted=[]
-                        for sentence in tst_data:
+                        for sentence in tst_data_cleaned:
                             inputs = trn_tokenizer(sentence, padding=True, truncation=True, max_length=512, return_tensors="pt").to("cpu") 
                             outputs = trn_model(**inputs)
                             probs = outputs[0].softmax(1)
@@ -535,7 +512,7 @@ class data_extraction():
                             predicted.append(cl)                            
                     elif self.model=='keyword_matching':
                         out.write('\n Following Keyword Match \n\n') 
-                        predicted=self.keyword_matching_model(tst_data)
+                        predicted=self.keyword_matching_model(tst_data_cleaned)
                           
                     out.write('Total No. of Sentences in Test Sample: '+str(p3)+'\n\n')
                     out.write('The relevant sentences are as follow: \n')
