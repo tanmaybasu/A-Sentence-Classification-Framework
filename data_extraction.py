@@ -21,14 +21,13 @@ from sklearn import svm
 from sklearn.linear_model import LogisticRegression 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.feature_selection import SelectKBest,chi2,mutual_info_classif 
+from sklearn.feature_selection import SelectKBest,chi2
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from gensim.models import LogEntropyModel
 from gensim.corpora import Dictionary
 from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
-from transformers.file_utils import is_tf_available, is_torch_available, is_torch_tpu_available
-from transformers import BertTokenizer, BertTokenizerFast, BertForSequenceClassification
+from transformers import BertTokenizerFast, BertForSequenceClassification
 from transformers import Trainer, TrainingArguments
 
 
@@ -55,14 +54,15 @@ class get_torch_data_format(torch.utils.data.Dataset):
 # Main Class
          
 class data_extraction():
-     def __init__(self,path='/home/xyz/data_extrcation/',model='entropy',clf_opt=None,no_of_selected_terms=None):
+     def __init__(self,path='/home/xyz/data_extrcation/',model='entropy',model_source=None,clf_opt='s',no_of_selected_terms=None,threshold=0.5):
         self.path = path
         self.model = model
+        self.model_source=model_source
         self.clf_opt=clf_opt
         self.no_of_selected_terms=no_of_selected_terms
         if self.no_of_selected_terms!=None:
             self.no_of_selected_terms=int(self.no_of_selected_terms) 
-       
+        self.threshold=float(threshold)
 # PDF to text conversion
      def pdf_to_text(self,file):        
         try:
@@ -132,7 +132,7 @@ class data_extraction():
             score=0.0;
             score=self.get_sent_score(sentence,phrase,'0')
             total_score+=score
-            if score>=0.5:
+            if score>=self.threshold:
                 tmp=[]
                 tmp.append(phrase)
                 tmp.append(score)
@@ -146,7 +146,7 @@ class data_extraction():
             tmp.append(score)
             phrase_score.append(tmp)
         return phrase_score
-    
+   
 # Building training corpus  
      def build_training_data(self):
          if os.path.isfile(self.path+'keywords.txt') and os.path.getsize(self.path+'keywords.txt') > 0:                      
@@ -186,9 +186,9 @@ class data_extraction():
                                 if phrase_score!=[]:
                                     ln=len(nltk.word_tokenize(phrase_score[0][0]))
              # Check if there is a floating point number 
-                                    if ln>2 and phrase_score[0][1]>=0.5 and re.findall(r'\d+\.\d+', sentence)!=[]:    
+                                    if ln>2 and phrase_score[0][1]>=self.threshold and re.findall(r'\d+\.\d+', sentence)!=[]:    
                                         fp.write(sentence+' ')
-                                    elif ln<=2 and phrase_score[0][1]>0.5 and re.findall(r'\d+\.\d+', sentence)!=[]: 
+                                    elif ln<=2 and phrase_score[0][1]>self.threshold and re.findall(r'\d+\.\d+', sentence)!=[]: 
                                         fp.write(sentence+' ')
             # Check if there is no number and given keywords 
                                     elif phrase_score[0][1]==0 and re.findall(r'\d+\.\d+', sentence)==[]: 
@@ -330,9 +330,9 @@ class data_extraction():
                 if phrase_score!=[]:
                     ln=len(nltk.word_tokenize(phrase_score[0][0]))
 # Check if there is a floating point number 
-                    if ln>2 and phrase_score[0][1]>=0.5 and re.findall(r'\d+\.\d+', sentence)!=[]:    
+                    if ln>2 and phrase_score[0][1]>=self.threshold and re.findall(r'\d+\.\d+', sentence)!=[]:    
                         predicted[num]=0
-                    elif ln<=2 and phrase_score[0][1]>0.5 and re.findall(r'\d+\.\d+', sentence)!=[]: 
+                    elif ln<=2 and phrase_score[0][1]>self.threshold and re.findall(r'\d+\.\d+', sentence)!=[]: 
                         predicted[num]=0
             num+=1   
         return predicted
@@ -371,7 +371,7 @@ class data_extraction():
         print(clf)
         return clf,ext2,trn_dct,trn_model
 
-# BioBERT model accuracy function
+# BERT model accuracy function
      def compute_metrics(self,pred):
          labels = pred.label_ids
          preds = pred.predictions.argmax(-1)
@@ -380,11 +380,10 @@ class data_extraction():
              'accuracy': acc,
          }     
 
-# BioBERT model    
-     def biobert_model(self,trn_data,trn_cat,test_size=0.2,max_length=512): 
-        print('\n ***** Running BioBERT Model ***** \n')       
-        model_name = "monologg/biobert_v1.1_pubmed"             # The given BioBERT Model
-        tokenizer = BertTokenizerFast.from_pretrained(model_name, do_lower_case=True) 
+# BERT model    
+     def bert_model(self,trn_data,trn_cat,test_size=0.2,max_length=512): 
+        print('\n ***** Running BERT Model ***** \n')       
+        tokenizer = BertTokenizerFast.from_pretrained(self.model_source, do_lower_case=True) 
         labels=np.asarray(trn_cat)     # Class labels in nparray format     
 
         (train_texts, valid_texts, train_labels, valid_labels), class_names = train_test_split(trn_data, labels, test_size=test_size), trn_cat
@@ -392,7 +391,7 @@ class data_extraction():
         valid_encodings = tokenizer(valid_texts, truncation=True, padding=True, max_length=max_length)
         train_dataset = get_torch_data_format(train_encodings, train_labels)
         valid_dataset = get_torch_data_format(valid_encodings, valid_labels)
-        model = BertForSequenceClassification.from_pretrained(model_name, num_labels=len(class_names)).to("cpu")
+        model = BertForSequenceClassification.from_pretrained(self.model_source, num_labels=len(class_names)).to("cpu")
         training_args = TrainingArguments(
             output_dir='./results',          # output directory
             num_train_epochs=3,              # total number of training epochs
@@ -417,7 +416,7 @@ class data_extraction():
         print('\n Trainer train done \n')        
         trainer.evaluate()
         print('\n save model \n')
-        model_path = "biobert_model_geometric_error"
+        model_path = self.path+"bert_model"
         model.save_pretrained(model_path)
         tokenizer.save_pretrained(model_path)
         return model,tokenizer,class_names
@@ -458,12 +457,13 @@ class data_extraction():
                 sentences = tokenize.sent_tokenize(text)
                 for sentence in sentences:
                     sentence.rstrip('.|?|\)|\]|\'|\"|;|`')
+# The stopwords should not be removed as many sentences are small and removing stopwords may devitate the performance 
 #                    sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords]) # Stopword removal                                        
                     sentence=re.sub(r'\d+\.\d+', '', sentence)          # Remove floating point numbers
                     trn_data.append(sentence)           
                     trn_cat.append(1)
                     p2=p2+1 
-   # Processing Test Samples
+ # Processing Test Samples
         if not os.path.isdir(self.path+'test_data'):
             print('The directory of test_data does not exist \n')
             sys.exit(0)
@@ -473,7 +473,7 @@ class data_extraction():
         if tst_files==[]:
             print('There is no test samples in the directory \n')
         else:
-   # Calling the training model
+ # Calling the training model
             print('\n ***** Building Training Model ***** \n')
             if self.model=='tfidf':
                 clf,ext2=self.tfidf_training_model(trn_data,trn_cat)
@@ -481,8 +481,8 @@ class data_extraction():
                 clf,ext2,trn_dct,trn_model=self.entropy_training_model(trn_data,trn_cat)
             elif self.model=='doc2vec':
                 clf,ext2,trn_model=self.doc2vec_training_model(ln,trn_data,trn_cat)
-            elif self.model=='biobert':
-                trn_model,trn_tokenizer,class_names=self.biobert_model(trn_data,trn_cat)                
+            elif self.model=='bert':
+                trn_model,trn_tokenizer,class_names=self.bert_model(trn_data,trn_cat)                
             print('\n ***** Processing Test Documents ***** \n')
             for item in tst_files:
                 if item.find('.pdf')>0:             # Checking if it is a PDF file 
@@ -495,6 +495,7 @@ class data_extraction():
                     sentences = tokenize.sent_tokenize(text)
                     for sentence in sentences:                          # Extracting sentences
                         tst_data.append(sentence)  
+# The stopwords should not be removed as many sentences are small and removing stopwords may devitate the performance 
 #                        sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords])
                         tst_cleaned_data.append(sentence)                        
                         p3=p3+1
@@ -502,7 +503,7 @@ class data_extraction():
                     if self.model=='tfidf':
                         out.write('\n Using '+ext2+' Classifier: \n\n') 
                         predicted = clf.predict(tst_cleaned_data) 
-                    elif self.model=='logentropy':
+                    elif self.model=='entropy':
                         out.write('\n Using '+ext2+' Classifier: \n\n') 
                         for sentence in tst_cleaned_data:
                             sentence=nltk.word_tokenize(sentence.lower()) 
@@ -523,8 +524,8 @@ class data_extraction():
                             inf_vec = trn_model.infer_vector(sentence,epochs=100)
                             tst_vec.append(inf_vec)
                         predicted = clf.predict(tst_vec)
-                    elif self.model=='biobert':
-                        out.write('\n Using BioBERT Model: \n\n') 
+                    elif self.model=='bert':
+                        out.write('\n Using BERT Model: \n\n') 
                         predicted=[]
                         for sentence in tst_data:
                             inputs = trn_tokenizer(sentence, padding=True, truncation=True, max_length=512, return_tensors="pt").to("cpu") 
