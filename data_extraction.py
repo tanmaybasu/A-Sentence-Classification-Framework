@@ -55,7 +55,7 @@ class get_torch_data_format(torch.utils.data.Dataset):
 # Main Class
          
 class data_extraction():
-     def __init__(self,path='/home/data_extrcation/',model='entropy',clf_opt=None,no_of_selected_terms=None):
+     def __init__(self,path='/home/xyz/data_extrcation/',model='entropy',clf_opt=None,no_of_selected_terms=None):
         self.path = path
         self.model = model
         self.clf_opt=clf_opt
