@@ -11,7 +11,7 @@ Pass the path of the project e.g., `/home/xyz/data_extraction/` as a parameter o
 Subsequently, run the following lines to get relevant sentences of geometric errors of radiotherapy for individual test documents. 
 
 ```
-de=data_extraction('/home/xyz/data_extraction/',model='entropy',clf_opt='s',no_of_selected_terms=1500)  
+de=data_extraction('/home/xyz/data_extraction/',model='entropy',clf_opt='s',no_of_selected_terms=1500,threshold=0.5)  
 de.build_training_data()       
 de.sentence_classification()
 ```
@@ -38,7 +38,7 @@ The following options of 'clf_opt' are available and the `default` is `s`:
 
         's' for Support Vector Machine 
 
-The deafult option of no_of_selected_terms is `None`, otherwise desired number of terms is needed. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
+`model_source` is the path of biobert model from [Hugging Face]{https://huggingface.co/models?search=biobert} or from the local drive. The default option is `monologg/biobert_v1.1_pubmed`. The deafult option of `no_of_selected_terms` is `None`, otherwise desired number of terms should be mentioned. The default option of threeshold (i.e., the sentence similarity threshold α) is 0.5. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
 
 ## Contact
 
