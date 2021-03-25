@@ -18,7 +18,7 @@ de.sentence_classification()
 
 The following options of `model` are available and the `default` is `entropy`: 
 
-        'biobert' for BioBERT model
+        'bert' for BERT model
 
         'entropy' for Entropy based term weighting scheme
 
