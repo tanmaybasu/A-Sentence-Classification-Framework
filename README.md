@@ -1,7 +1,7 @@
 # A Sentence Classification Framework to Identify Geometric Errors of Radiotherapy from Literature
-The aim of this project is to build a framework to extract sentences from relevant literaure of radiotherapy. The framework builds a training corpus by extracting senetnces containing different data elements of geometric errors of radiotherapy from relevant publications by using some keywords fixed by the domain expert. Subsequently, the method trains a machine learning classifier e.g., Support Vector Machine using the training corpus to extract the sentences containing desired geometric errors from test documents. The experiments are conducted on 60 publications to automatically extract the sentences containing geometric errors of radiotherapy.  
+The aim of this project is to build a framework to extract sentences from relevant literature of radiotherapy. The framework builds a training corpus by extracting sentences containing different data elements of geometric errors of radiotherapy from relevant publications by using some keywords fixed by the domain expert. Subsequently, the method trains a machine learning classifier e.g., Support Vector Machine using the training corpus to extract the sentences containing desired geometric errors from test documents. The experiments are conducted on 60 publications to automatically extract the sentences containing geometric errors of radiotherapy.  
 
-## Prerequsites
+## Prerequisites
 [Fitz](https://pypi.org/project/fitz/), [Gensim](https://github.com/RaRe-Technologies/gensim), [NLTK](https://www.nltk.org/install.html), [NumPy](https://numpy.org/install/), [Python 3](https://www.python.org/downloads/), [Scikit-Learn](https://scikit-learn.org/0.16/install.html), [Torch](https://pypi.org/project/torch/), [Transformers](https://pypi.org/project/transformers/)
 
 ## How to run the framework?
