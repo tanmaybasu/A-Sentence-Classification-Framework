@@ -421,6 +421,7 @@ class data_extraction():
                 text=re.sub(r'\n', '', text)                            # Remove \n
                 sentences = tokenize.sent_tokenize(text)
                 for sentence in sentences:
+# The stopwords should not be removed as many sentences are small and removing stopwords may devitate the performance 
 #                    sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords]) # Stopword removal                    
                     sentence=re.sub(r'\d+\.\d+', '', sentence)          # Remove floating point numbers
                     sentence.rstrip('.|?|\)|\]|\'|\"|;|`')
@@ -436,7 +437,8 @@ class data_extraction():
                 sentences = tokenize.sent_tokenize(text)
                 for sentence in sentences:
                     sentence.rstrip('.|?|\)|\]|\'|\"|;|`')
-                    sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords]) # Stopword removal                                        
+# The stopwords should not be removed as many sentences are small and removing stopwords may devitate the performance 
+#                    sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords]) # Stopword removal                                        
                     sentence=re.sub(r'\d+\.\d+', '', sentence)          # Remove floating point numbers
                     trn_data.append(sentence)           
                     trn_cat.append(1)
@@ -473,7 +475,8 @@ class data_extraction():
                     sentences = tokenize.sent_tokenize(text)
                     for sentence in sentences:                          # Extracting sentences
                         tst_data.append(sentence)  
-                        sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords])
+# The stopwords should not be removed as many sentences are small and removing stopwords may devitate the performance 
+#                        sentence=' '.join([word for word in sentence.lower().rstrip('.').split(' ') if word not in en_stopwords])
                         tst_data_cleaned.append(sentence)                        
                         p3=p3+1
     # Classification of the test samples 
