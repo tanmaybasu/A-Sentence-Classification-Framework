@@ -3,7 +3,7 @@
 """
 Created on Saturday December 19 2020 at 16:16:19
 
-@author: Tanmay Basu
+@Author: Tanmay Basu
 """
 
 import csv,os,re,sys
