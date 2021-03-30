@@ -516,7 +516,9 @@ class data_extraction():
                     elif self.model=='keyword_matching':
                         out.write('\n Following Keyword Match \n\n') 
                         predicted=self.keyword_matching_model(tst_data_cleaned)
-                          
+                    else:
+                        print('Error!!! Please select a valid model \n')
+                        sys.exit(0)                                 
                     out.write('Total No. of Sentences in Test Sample: '+str(p3)+'\n\n')
                     out.write('The relevant sentences are as follow: \n')
                     nps=0
