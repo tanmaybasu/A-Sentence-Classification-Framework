@@ -294,6 +294,7 @@ class data_extraction():
                
 # Keyword_matching model    
      def keyword_matching_model(self,tst_data):
+        print('\n ***** Running Keyword Match Based Model ***** \n')                 
         predicted=[1 for i in range(0,len(tst_data))]
         if os.path.isfile(self.path+'keywords.txt') and os.path.getsize(self.path+'keywords.txt') > 0:    
             fk=open(self.path+'keywords.txt', "r") 
