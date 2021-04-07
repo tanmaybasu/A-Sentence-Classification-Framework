@@ -3,7 +3,7 @@
 """
 Created on Saturday December 19 2020 at 16:16:19
 
-@Author: Tanmay Basu
+@author: Tanmay Basu
 """
 
 import csv,os,re,sys
@@ -54,10 +54,11 @@ class get_torch_data_format(torch.utils.data.Dataset):
 # Main Class
          
 class data_extraction():
-     def __init__(self,path='/home/xyz/data_extrcation/',model='entropy',model_source='monologg/biobert_v1.1_pubmed',clf_opt='s',no_of_selected_terms=None,threshold=0.5):
+     def __init__(self,path='/home/data_extrcation/',model='entropy',model_source='monologg/biobert_v1.1_pubmed',vec_len=20,clf_opt='s',no_of_selected_terms=None,threshold=0.5):
         self.path = path
         self.model = model
         self.model_source=model_source
+        self.vec_len=int(vec_len)        
         self.clf_opt=clf_opt
         self.no_of_selected_terms=no_of_selected_terms
         if self.no_of_selected_terms!=None:
@@ -262,11 +263,11 @@ class data_extraction():
         return clf,ext2
 
 # Doc2Vec model    
-     def doc2vec_training_model(self,ln,trn_data,trn_cat):
-        print('\n ***** Building Doc2Vec Based Training Model ***** \n')
+     def doc2vec_training_model(self,trn_data,trn_cat):
+        print('\n ***** Building Doc2Vec Training Model ***** \n')
         tagged_data = [TaggedDocument(words=nltk.word_tokenize(_d.lower()), tags=[str(i)]) for i, _d in enumerate(trn_data)]
         max_epochs = 10       
-        trn_model = Doc2Vec(vector_size=int(ln),alpha=0.025,min_alpha=0.00025,min_count=1,dm =1)
+        trn_model = Doc2Vec(vector_size=self.vec_len,alpha=0.025,min_alpha=0.00025,min_count=1,dm =1)
         trn_model.build_vocab(tagged_data)  
         print('Number of Training Samples {0}'.format(trn_model.corpus_count))   
         for epoch in range(max_epochs):
@@ -288,7 +289,7 @@ class data_extraction():
         grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10) 
         grid.fit(trn_vec,trn_cat)     
         clf= grid.best_estimator_
-        print(clf)  
+#        print(clf)  
         return clf,ext2,trn_model
                
 # Keyword_matching model    
@@ -402,8 +403,6 @@ class data_extraction():
 
 # Classification using the Gold Statndard after creating it from the raw text    
      def sentence_classification(self):
-        if self.model=='doc2vec':
-            ln = input("Enter the length of the Doc2Vec word vector: \t")
         trn_data=[];    trn_cat=[];   
         p1=0; p2=0;
     
@@ -460,7 +459,7 @@ class data_extraction():
             elif self.model=='entropy':
                 clf,ext2,trn_dct,trn_model=self.entropy_training_model(trn_data,trn_cat)
             elif self.model=='doc2vec':
-                clf,ext2,trn_model=self.doc2vec_training_model(ln,trn_data,trn_cat)
+                clf,ext2,trn_model=self.doc2vec_training_model(trn_data,trn_cat)
             elif self.model=='bert':
                 trn_model,trn_tokenizer,class_names=self.bert_model(trn_data,trn_cat)                
             print('\n ***** Processing Test Documents ***** \n')
@@ -518,7 +517,7 @@ class data_extraction():
                         predicted=self.keyword_matching_model(tst_data_cleaned)
                     else:
                         print('Error!!! Please select a valid model \n')
-                        sys.exit(0)                                 
+                        sys.exit(0)                                  
                     out.write('Total No. of Sentences in Test Sample: '+str(p3)+'\n\n')
                     out.write('The relevant sentences are as follow: \n')
                     nps=0
