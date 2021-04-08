@@ -362,7 +362,7 @@ class data_extraction():
          }     
 
 # BERT model    
-     def bert_model(self,trn_data,trn_cat,test_size=0.2,max_length=512): 
+     def bert_training_model(self,trn_data,trn_cat,test_size=0.2,max_length=512): 
         print('\n ***** Running BERT Model ***** \n')       
         tokenizer = BertTokenizerFast.from_pretrained(self.model_source, do_lower_case=True) 
         labels=np.asarray(trn_cat)     # Class labels in nparray format     
@@ -462,7 +462,7 @@ class data_extraction():
             elif self.model=='doc2vec':
                 clf,ext2,trn_model=self.doc2vec_training_model(trn_data,trn_cat)
             elif self.model=='bert':
-                trn_model,trn_tokenizer,class_names=self.bert_model(trn_data,trn_cat)                
+                trn_model,trn_tokenizer,class_names=self.bert_training_model(trn_data,trn_cat)                
             print('\n ***** Processing Test Documents ***** \n')
             for item in tst_files:
                 if item.find('.pdf')>0:             # Checking if it is a PDF file 
