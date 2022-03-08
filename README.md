@@ -40,7 +40,7 @@ The following options of 'clf_opt' are available and the `default` is `s`:
 
 `model_source` is the path of BERT model from [Hugging Face](https://huggingface.co/models?search=biobert) or from the local drive. The default option is `monologg/biobert_v1.1_pubmed`. `vec_len` is the desired length of the feature vectors developed by the Doc2Vec model. The deafult option of `no_of_selected_terms` is `None`, otherwise desired number of terms should be mentioned. The default option of threshold (i.e., the sentence similarity threshold α) is 0.5. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
 
-# Note
+### Note
 The required portion of the code (in `sentence_classification.py`) to run a given BERT model is commented, as in many standalone machine one may face difficulty in installing BERT. These comments has to be removed in order to run BERT. Otherwise, a separate code (`sentence_classification_bert.py`) is given to run BERT model for the given data on a standalone machine. 
 
 ## Contact
