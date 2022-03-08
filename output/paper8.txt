@@ -1,0 +1,63 @@
+
+ Using svm Classifier: 
+
+Total No. of Sentences in Test Sample: 3268
+
+The relevant sentences are as follow: 
+
+1)  LR
+CC
+AP
+LR
+CC
+AP
+Rotation (�)
+m
+�1.1 ± 0.2
+�0.2 ± 1.6
+�0.1 ± 0.2\.
+
+2)  Translation (mm)
+m
+�0.3 ± 0.6
+�0.3 ± 0.4
+�0.3
+0.7\.
+
+3)  LR
+CC
+AP
+Rotation (�)
+m
+�0.6
+0.2
+0.0\.
+
+4)  Translation (mm)
+m
+�0.1
+0.3
+0.9\.
+
+5)  LR
+CC
+AP
+Rotation (�)
+S- expected
+1.7
+0.6
+0.5\.
+
+6)  Compared with contour- based regis-
+tration, they found a gray- value registration accuracy of 2.4�,
+1.6�, and 1.3� (1 SD) for rotation and 0.7, 1.3, and 1.2 mm for
+translation in the LR, CC, and AP directions, respectively.
+
+7)  The differences between the expected and measured sys-
+tematic errors (Table 5) were within 0.5� and 0.5 mm for
+the rotations around the CC and AP axes and the translation
+in the LR direction, respectively.
+
+8)  In their data set, the difference between the measured
+and expected systematic errors in rotation around the LR, CC,
+and AP axes was 1.9�, 0.7�, and 1.1� and for translation in the\.

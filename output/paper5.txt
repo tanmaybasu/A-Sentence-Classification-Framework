@@ -1,0 +1,31 @@
+
+ Using svm Classifier: 
+
+Total No. of Sentences in Test Sample: 1464
+
+The relevant sentences are as follow: 
+
+1)  Herk's formula (2.5Σ + 0.7σ) where Σ denoted the systematic error
+and
+σ
+the
+random
+error,
+both
+expressed
+as
+one
+standard
+(a)
+(b)
+(c)
+F I G. 3.
+
+2)  B
+|
+Errors and margins for OAR
+The mean amplitude of the BHL was 18.4 mm (range from 10.8 to
+34.2 mm) in Group A and 11.5 mm (range from 9.5 to 16.5 mm) in\.
+
+3)  In
+the AP/LAT direction the systematic errors of 1.0 and 1.5 mm in Group\.

@@ -1,0 +1,191 @@
+
+ Using svm Classifier: 
+
+Total No. of Sentences in Test Sample: 2693
+
+The relevant sentences are as follow: 
+
+1)  Results: The mean length of the displacement vector for rigid masks was 0.312 ± 0.152 cm (intracranial) and
+0.586 ± 0.294 cm (neck).
+
+2)  For the thermoplastic masks, the value was 0.472 ± 0.174 cm (intracranial) and
+0.726 ± 0.445 cm (neck).
+
+3)  Rigid masks with body tattoos had a displacement vector length in the neck region
+of 0.35 ± 0.197 cm.
+
+4)  The intracranial residual error and intrafractional motility after X- ray volume imaging
+correction for rigid masks was 0.188 ± 0.074 cm, and was 0.134 ± 0.14 cm for thermoplastic masks.
+
+5)  Kilovoltage CBCT
+implemented on board a linear accelerator offers the possi-
+bility of daily detection and correction of translational and
+rotational errors with a small dose exposure (�0.9 m. Gy [26,
+27]) and good image quality.
+
+6)  An average of the isocenter translation corrections by
+a physician with the matching area restricted to the skull
+region in the x, y, and z directions yielded a value of
+0.056 ± 0.149 cm, 0.035 ± 0.289 cm, and �0.03 ± 0.18
+cm, respectively.
+
+7)  The length of the translation- vector
+(sum- vector) calculated from the x, y, and z corrections
+was 0.311 ± 0.21 cm.
+
+8)  The average isocenter rotation by
+the same examiner in the x, y, and z directions yielded
+�0.003° ± 1.074°, 0.17° ± 1.39°, and �0.07° ± 0.53°,
+respectively.
+
+9)  The same corrections for the isocenter translation in x, y,
+and z directions by a second physician yielded 0.02 ± 0.13 cm,
+0.077 ± 0.263 cm, and 0.005 ± 0.168 cm, respectively.
+
+10)  The
+translation- vector (sum- vector) calculated from the x, y, and
+z corrections was 0.309 ± 0.148 cm.
+
+11)  The rotation of the
+isocenter by this examiner in the x, y, and z directions was
+0.019° ± 0.994°, 0.197° ± 1.09°, and �0.01° ± 0.24°,
+respectively.
+
+12)  Using automatic bone- matching corrections with an
+alignment clipbox respecting the skull (intracranial region)
+resulted in a translational correction in the x, y, and z
+directions of 0.039 ± 0.175 cm, 0.083 ± 0.232 cm, and
+0.005 ± 0.174 cm, respectively.
+
+13)  The translation- vector
+(sum- vector) calculated from the x, y, and z corrections was
+0.312 ± 0.152 cm.
+
+14)  The rotational correction in the x, y, and
+z directions with automatic bone matching was 0.073° ± 1.018°, 0.13° ± 1.653°, and �0.25° ± 0.881°, respectively.
+
+15)  With all three evaluations, the maximal standard devia-
+tion of the corrections in the x, y, and z directions was
+�1.75 mm, �2.9 mm, and �1.8 mm, respectively.
+
+16)  The
+rotational errors did not exceed 1.07°, 1.65°, and 0.88° in
+the x, y, and z directions, respectively.
+
+17)  Using automatic bone matching corrections with an
+alignment clipbox encompassing the skull (intracranial tu-
+mors) resulted in a translational correction in the x, y, and z
+directions of �0.02 ± 0.227 cm, 0.23 ± 0.233 cm, and
+�0.154 ± 0.277 cm, respectively.
+
+18)  The translation- vector
+(sum- vector) calculated from the x, y, and z corrections was
+0.472 ± 0.174 cm.
+
+19)  The rotational correction in the x, y, and
+z directions with bone matching was �1.47° ± 1.75°,
+�0.13° ± 1.921°, and �0.06° ± 2.18°, respectively.
+
+20)  Using automatic bone matching corrections with an align-
+ment clipbox encompassing the neck resulted in a translational
+correction in the x, y, and z directions of �0.158 ± 0.207 cm,
+0.225 ± 0.241 cm, and 0.179 ± 0.479 cm, respectively.
+
+21)  The
+correction vector calculated from the x, y, and z correction
+was 0.586 ± 0.294 cm.
+
+22)  The rotational correction in the x, y,
+and z directions was 1.027° ± 3.527°, 1.013° ± 2.556°, and
+1.257° ± 3.008°, respectively.
+
+23)  Using automatic bone matching corrections with an
+alignment clipbox encompassing the neck resulted in a
+translational correction in the x, y, and z directions of
+0.043 ± 0.258 cm, �0.04 ± 0.191 cm, and �0.08 ± 0.241
+cm, respectively.
+
+24)  The correction vector calculated from the
+x, y, and z correction was 0.35 ± 0.197 cm.
+
+25)  The rotational
+correction in the x, y, and z directions was �0.82° ± 1.298°, 0.654° ± 1.059°, and 0.023° ± 1.204°, respectively.
+
+26)  Using automatic bone matching corrections with an
+alignment clipbox respecting the neck (head- and- neck tu-
+mors) resulted in a translational correction in the x, y, and z
+directions of �0.205 ± 0.298 cm, 0.407 ± 0.516 cm, and
+�0.142 ± 0.393 cm, respectively.
+
+27)  The translational vector
+calculated from the x, y, and z corrections was 0.726 ± 0.445 cm.
+
+28)  The rotational correction in the x, y, and z
+directions was �0.2° ± 2.31°, �1.3° ± 2.69°, and �1.09° ± 2.02°, respectively.
+
+29)  In the rigid masks, the translational correction in the x,
+y, and z directions was 0.017 ± 0.118 cm, 0.07 ± 0.094
+cm, and �0.04 ± 0.115 cm, respectively.
+
+30)  Rigid masks
+0.039 ± 0.175
+0.083 ± 0.232
+0.005 ± 0.174 0.312 ± 0.152
+0.073 ± 1.018
+0.13 ± 1.653 �0.25 ± 0.0881\.
+
+31)  Thermoplastic
+masks
+�0.02 ± 0.227
+0.23 ± 0.233 �0.154 ± 0.277 0.472 ± 0.174 �1.47 ± 1.75
+�0.13 ± 1.921 �0.06 ± 2.18\.
+
+32)  No tattoos
+�0.158 ± 0.207
+0.225 ± 0.241
+0.179 ± 0.479 0.586 ± 0.294
+1.027 ± 3.527
+1.013 ± 2.556
+1.257 ± 3.008\.
+
+33)  Body tattoos
+0.043 ± 0.258 �0.04 ± 0.191
+�0.08 ± 0.241
+0.35 ± 0.197 �0.82 ± 1.298
+0.654 ± 1.059
+0.023 ± 1.204\.
+
+34)  Thermoplastic
+masks
+0.205 ± 0.298
+0.407 ± 0.516
+0.142 ± 0.393 0.726 ± 0.445
+�0.2 ± 2.31
+�1.3 ± 2.69
+�1.09 ± 2.02\.
+
+35)  The rotational correction in the x, y,
+and z directions was �1.15° ± 1.045°, �0.1° ± 0.923°, and
+�0.22° ± 0.717°, respectively.
+
+36)  In the thermoplastic masks, the translational correction in
+the x, y, and z directions was 0.04 ± 0.14 cm, 0.033 ± 0.145 cm, and 0.01 ± 0.106 cm, respectively.
+
+37)  The transla-
+tional vector calculated from the x, y, and z corrections was
+0.134 ± 0.14 cm.
+
+38)  The rotational correction in the x, y, and
+z directions was �0.13° ± 1.206°, �0.13° ± 1.237°, and
+0.08° ± 0.93°, respectively.
+
+39)  With a mean length of the displacement vector of 0.312 ± 0.152 cm intracranially and 0.586 ± 0.294 cm in the neck
+and 0.35 � 0,197 cm without and with body tattoos, re-
+spectively, rigid mask systems per se provide excellent
+repositioning accuracy.
+
+40)  The advantage over
+thermoplastic masks is clear (0.472 ± 0.174 cm intracrani-
+ally and 0.726 ± 0.445 cm in the neck) and justiﬁes the
+extra effort of manufacturing rigid masks if a stereotactic setup
+is used without 3D image guidance.

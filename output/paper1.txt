@@ -1,0 +1,57 @@
+
+ Using svm Classifier: 
+
+Total No. of Sentences in Test Sample: 1830
+
+The relevant sentences are as follow: 
+
+1)  The voxel size of the images ac-
+quired using our CT simulator was 1.17 mm � 1.17 mm � 3 mm.
+
+2)  Thus, the systematic position uncertainty arising from the limited
+spatial resolution of our CT simulator was about 0.59 mm � 0.59
+mm � 1.5 mm (CT voxel dimension/2).
+
+3)  The Type S total vector displacement for the upper
+landmark grouping was 1.9 mm and that of the Accuﬁx sys-
+tem was 1.2 mm (SD).
+
+4)  The corresponding total vector dis-
+placements for the lower landmark grouping for the Type S
+and Accuﬁx arms were 5.7 mm and 5.8 mm (SD), respec-
+tively.
+
+5)  The Type S population mean � SD systematic vector dis-
+placement error was 2.9 ± 1.2, 2.9 ± 1.4, 3.6 ± 2.1, 8.8 ± 3.1, 10 � 6.1, 5.1 ± 2.1, 3.1 ± 1.6, and 8.0 ± 4.5 mm at
+the odontoid, right styloid, left styloid, C7 spinous process,
+right and left acromial extremities, upper landmarks, and
+lower landmarks, respectively.
+
+6)  The corresponding popula-
+tion mean systematic vector displacement errors for the Ac-
+cuﬁx system were 3.0 ± 1.0, 2.6 ± 0.9, 2.7 ± 0.9, 10.2 ± 7.2, 8.0 ± 5.1, 5.7 ± 2.4, 2.8 ± 0.9, and 8.0 ± 5.5 mm\.
+
+7)  S and Accuﬁx immobilization device was 5.2 ± 1.4 min and
+5.0 ± 1.1 min, respectively.
+
+8)  Type S device for the upper landmark grouping was 1.9
+mm and that of the Accuﬁx system was 1.2 mm (SD).
+
+9)  The
+corresponding total vector displacement for the lower land-
+mark grouping for the Type S and Accuﬁx arms was 5.7
+mm and 5.8 mm (SD), respectively.
+
+10)  The total population CC, AP,
+and ML displacements for the upper landmarks in the Type S
+arm ranged from 1.7 to 2.5 mm (SD) and those of the Accuﬁx
+arm ranged from 1.2 to 2.0 mm (SD).
+
+11)  For the lower bony
+landmarks, the total population CC, AP, and ML displace-
+ments for the Type S arm were 4.9–6.4 mm (SD) and for
+the Accuﬁx arm were 4.6–6.3 mm (SD).
+
+12)  (11) reported setup displacements of 1.3
+and 2.2 mm (1 SD) between portal ﬁlms and topograms for
+the CC and AP cartesian dimensions, respectively.

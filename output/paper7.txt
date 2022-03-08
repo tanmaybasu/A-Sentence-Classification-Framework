@@ -1,0 +1,6 @@
+
+ Using svm Classifier: 
+
+Total No. of Sentences in Test Sample: 1000
+
+The relevant sentences are as follow: 
