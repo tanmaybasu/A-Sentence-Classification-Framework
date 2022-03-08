@@ -53,7 +53,7 @@ class get_torch_data_format(torch.utils.data.Dataset):
 
 # Main Class
          
-class data_extraction():
+class sentence_classification():
      def __init__(self,path='/home/data_extrcation/',model='entropy',model_source='monologg/biobert_v1.1_pubmed',vec_len=20,clf_opt='s',no_of_selected_terms=None,threshold=0.5):
         self.path = path
         self.model = model
