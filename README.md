@@ -6,12 +6,12 @@ The aim of this project is to build a framework to extract sentences from releva
 
 ## How to run the framework?
 
-Pass the path of the project e.g., `/home/xyz/data_extraction/` as a parameter of the main class in `data_extraction.py`. Create the following directories inside this path: 1) `training_data`, 2) `test_data`. Therefore keep the individual PDFs of training and test data in the respective directories. The list of keywords to build the training data should be stored as `keywords.txt` in the main project path. Create a directory, called, `output` in the main project path to store the outputs of individual test samples. 
+Pass the path of the project e.g., `/home/xyz/sentence_classification/` as a parameter of the main class in `data_extraction.py`. Create the following directories inside this path: 1) `training_data`, 2) `test_data`. Therefore keep the individual PDFs of training and test data in the respective directories. The list of keywords to build the training data should be stored as `keywords.txt` in the main project path. Create a directory, called, `output` in the main project path to store the outputs of individual test samples. 
 
 Subsequently, run the following lines to get relevant sentences of geometric errors of radiotherapy for individual test documents. 
 
 ```
-de=data_extraction('/home/xyz/data_extraction/',model='entropy',clf_opt='s',no_of_selected_terms=1500,threshold=0.5)  
+de=data_extraction('/home/xyz/sentence_classification/',model='entropy',clf_opt='s',no_of_selected_terms=1500,threshold=0.5)  
 de.build_training_data()       
 de.sentence_classification()
 ```
@@ -39,6 +39,9 @@ The following options of 'clf_opt' are available and the `default` is `s`:
         's' for Support Vector Machine 
 
 `model_source` is the path of BERT model from [Hugging Face](https://huggingface.co/models?search=biobert) or from the local drive. The default option is `monologg/biobert_v1.1_pubmed`. `vec_len` is the desired length of the feature vectors developed by the Doc2Vec model. The deafult option of `no_of_selected_terms` is `None`, otherwise desired number of terms should be mentioned. The default option of threshold (i.e., the sentence similarity threshold α) is 0.5. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
+
+# Note
+The required portion of the code (in `sentence_classification.py`) to run a given BERT model is commented, as in many standalone machine one may face difficulty in installing BERT. These comments has to be removed in order to run BERT. Otherwise, a separate code (`sentence_classification_bert.py`) is given to run BERT model for the given data on a standalone machine. 
 
 ## Contact
 
