@@ -8,6 +8,7 @@ Created on Saturday December 19 2020 at 16:16:19
 
 import csv,os,re,sys
 import fitz
+import PyPDF2
 import nltk
 import numpy as np
 from nltk import tokenize
@@ -26,9 +27,9 @@ from sklearn.metrics import accuracy_score
 from gensim.models import LogEntropyModel
 from gensim.corpora import Dictionary
 from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
-#import torch
-#from transformers import BertTokenizerFast, BertForSequenceClassification
-#from transformers import Trainer, TrainingArguments
+import torch
+from transformers import BertTokenizerFast, BertForSequenceClassification
+from transformers import Trainer, TrainingArguments
 
 
 en_stopwords = ['a', 'about', 'above', 'across', 'after', 'again', 'against', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'among', 'an', 'and', 'another', 'any', 'anybody', 'anyone', 'anything', 'anywhere', 'are', 'area', 'areas', 'around', 'as', 'ask', 'asked', 'asking', 'asks', 'at', 'away', 'b', 'back', 'backed', 'backing', 'backs', 'be', 'became', 'because', 'become', 'becomes', 'been', 'before', 'began', 'behind', 'being', 'beings', 'best', 'better', 'between', 'big', 'both', 'but', 'by', 'c', 'came', 'can', 'cannot', 'case', 'cases', 'certain', 'certainly', 'clear', 'clearly', 'come', 'could', 'd', 'did', 'differ', 'different', 'differently', 'do', 'does', 'done', 'down', 'down', 'downed', 'downing', 'downs', 'during', 'e', 'each', 'early', 'either', 'end', 'ended', 'ending', 'ends', 'enough', 'even', 'evenly', 'ever', 'every', 'everybody', 'everyone', 'everything', 'everywhere', 'f', 'face', 'faces', 'fact', 'facts', 'far', 'felt', 'few', 'find', 'finds', 'first', 'for', 'four', 'from', 'full', 'fully', 'further', 'furthered', 'furthering', 'furthers', 'g', 'gave', 'general', 'generally', 'get', 'gets', 'give', 'given', 'gives', 'go', 'going', 'good', 'goods', 'got', 'great', 'greater', 'greatest', 'group', 'grouped', 'grouping', 'groups', 'h', 'had', 'has', 'have', 'having', 'he', 'her', 'here', 'herself', 'high', 'high', 'high', 'higher', 'highest', 'him', 'himself', 'his', 'how', 'however', 'i', 'if', 'important', 'in', 'interest', 'interested', 'interesting', 'interests', 'into', 'is', 'it', 'its', 'itself', 'j', 'just', 'k', 'keep', 'keeps', 'kind', 'knew', 'know', 'known', 'knows', 'l', 'large', 'largely', 'last', 'later', 'latest', 'least', 'less', 'let', 'lets', 'like', 'likely', 'long', 'longer', 'longest', 'm', 'made', 'make', 'making', 'man', 'many', 'may', 'me', 'member', 'members', 'men', 'might', 'more', 'most', 'mostly', 'mr', 'mrs', 'much', 'must', 'my', 'myself', 'n', 'necessary', 'need', 'needed', 'needing', 'needs', 'never', 'new', 'new', 'newer', 'newest', 'next', 'no', 'nobody', 'non', 'noone', 'not', 'nothing', 'now', 'nowhere', 'number', 'numbers', 'o', 'of', 'off', 'often', 'old', 'older', 'oldest', 'on', 'once', 'one', 'only', 'open', 'opened', 'opening', 'opens', 'or', 'order', 'ordered', 'ordering', 'orders', 'other', 'others', 'our', 'out', 'over', 'p', 'part', 'parted', 'parting', 'parts', 'per', 'perhaps', 'place', 'places', 'point', 'pointed', 'pointing', 'points', 'possible', 'present', 'presented', 'presenting', 'presents', 'problem', 'problems', 'put', 'puts', 'q', 'quite', 'r', 'rather', 'really', 'right', 'right', 'room', 'rooms', 's', 'said', 'same', 'saw', 'say', 'says', 'second', 'seconds', 'see', 'seem', 'seemed', 'seeming', 'seems', 'sees', 'several', 'shall', 'she', 'should', 'show', 'showed', 'showing', 'shows', 'side', 'sides', 'since', 'small', 'smaller', 'smallest', 'so', 'some', 'somebody', 'someone', 'something', 'somewhere', 'state', 'states', 'still', 'still', 'such', 'sure', 't', 'take', 'taken', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'therefore', 'these', 'they', 'thing', 'things', 'think', 'thinks', 'this', 'those', 'though', 'thought', 'thoughts', 'three', 'through', 'thus', 'to', 'today', 'together', 'too', 'took', 'toward', 'turn', 'turned', 'turning', 'turns', 'two', 'u', 'under', 'until', 'up', 'upon', 'us', 'use', 'used', 'uses', 'v', 'very', 'w', 'want', 'wanted', 'wanting', 'wants', 'was', 'way', 'ways', 'we', 'well', 'wells', 'went', 'were', 'what', 'when', 'where', 'whether', 'which', 'while', 'who', 'whole', 'whose', 'why', 'will', 'with', 'within', 'without', 'work', 'worked', 'working', 'works', 'would', 'x', 'y', 'year', 'years', 'yet', 'you', 'young', 'younger', 'youngest', 'your', 'yours', 'z']
@@ -38,21 +39,20 @@ for word in nltk_stopwords:
         en_stopwords.append(word)
 
 # Class for Torch Model
-#class get_torch_data_format(torch.utils.data.Dataset):
-#    def __init__(self, encodings, labels):
-#        self.encodings = encodings
-#        self.labels = labels
-#
-#    def __getitem__(self, idx):
-#        item = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
-#        item["labels"] = torch.tensor([self.labels[idx]])
-#        return item
-#
-#    def __len__(self):
-#        return len(self.labels)
+class get_torch_data_format(torch.utils.data.Dataset):
+    def __init__(self, encodings, labels):
+        self.encodings = encodings
+        self.labels = labels
 
-# Main Class
-         
+    def __getitem__(self, idx):
+        item = {k: torch.tensor(v[idx]) for k, v in self.encodings.items()}
+        item["labels"] = torch.tensor([self.labels[idx]])
+        return item
+
+    def __len__(self):
+        return len(self.labels)
+
+# Main Class       
 class sentence_classification():
      def __init__(self,path='/home/data_extrcation/',model='entropy',model_source='monologg/biobert_v1.1_pubmed',vec_len=20,clf_opt='s',no_of_selected_terms=None,threshold=0.5):
         self.path = path
@@ -64,18 +64,35 @@ class sentence_classification():
         if self.no_of_selected_terms!=None:
             self.no_of_selected_terms=int(self.no_of_selected_terms) 
         self.threshold=float(threshold)
+
 # PDF to text conversion
      def pdf_to_text(self,file):        
-        try:
+#         print(file)
+         try:
+#            print('Fitz is running ')
             doc = fitz.open(file, filetype = "pdf")        # PDF to text conversion  
             texts=[] 
+            tools = fitz.Tools()
             for page in doc:
-                texts.append(page.getText()) 
+                tools.store_shrink(100)
+                texts.append(page.getText().encode('unicode-escape').decode('utf-8')) 
             text=''.join(texts)
-        except:
-            text='' 
-        return text
-
+         except:
+            try:
+#                print('PyPDF2 is running ')                
+                pdfobj=open(file,'rb')        # PDF to text conversion  
+                pdfreader=PyPDF2.PdfFileReader(pdfobj) 
+                pages=pdfreader.numPages
+                texts=[] 
+                for i in range(0,pages-1):
+                    pageobj=pdfreader.getPage(i)
+                    texts.append(pageobj.extractText().encode('unicode-escape').decode('utf-8')) 
+                text=''.join(texts)
+            except:
+                text='' 
+    #         print(text)
+         return text
+    
 # Text refinement
      def text_refinement(self,text='hello'):
         text = re.sub(r'[^!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~\n\w]+',' ', text)     # Remove special characters e.g., emoticons-😄. The ^ in the beginning ensures that all the natural characters will be kept. 
@@ -99,19 +116,19 @@ class sentence_classification():
         score = 0   
         # sent_sim is the similarity measure
         for token in target_tokens:
-            if token in sent_tokens and token not in stopwords.words('english'):    # Discarding the stopwords 
+            if token in sent_tokens and token not in en_stopwords:    # Discarding the stopwords 
                 score += 1
         if score!=0:
-            score = float(score)/len(target_tokens)      
+            score = float(score)/len(target_tokens) 
         return score
     
 # Check if a sentence is relevant to the data element 
      def check_relevant_sentences(self,sentence,keywords):
         phrase_score=[]; total_score=0.0
-        sentence = re.sub(r'[^a-zA-Z0-9.?:!$\n]', ' ', sentence)    # Remove special character 
+#        sentence = re.sub(r'[^a-zA-Z0-9.?:!$\n]', ' ', sentence)    # Remove special character 
         for phrase in keywords:
             score=0.0;
-            score=self.get_sent_score(sentence,phrase)
+            score=self.get_sent_score(sentence,phrase) 
             total_score+=score
             if score>=self.threshold:
                 tmp=[]
@@ -131,10 +148,15 @@ class sentence_classification():
 # Building training corpus  
      def build_training_data(self):
          if os.path.isfile(self.path+'keywords.txt') and os.path.getsize(self.path+'keywords.txt') > 0:                      
-             fk=open(self.path+'keywords.txt', "r") 
-             keywords = list(csv.reader(fk,delimiter='\n'))
-             keywords = [item for sublist in keywords for item in sublist]
+             with open('keywords.txt', 'r', encoding='utf-8', errors='ignore') as fk:
+                 keywords = list(csv.reader(fk,delimiter='\n'))
              fk.close()
+           # removing duplicates
+             keywords = [item.strip(' ').strip('\t') for sublist in keywords for item in sublist]
+          # removing empty strings
+             keywords[:] = [elm for elm in keywords if elm]   
+             keywords=list(set(keywords))
+#             print(keywords)
          else:                                                  # If the keywords file does not exist or is empty then exit 
              print('Either keywords.txt does not exist or it is empty \n')
              sys.exit(0)
@@ -222,7 +244,7 @@ class sentence_classification():
             ext2='svm'
             clf = svm.SVC(kernel='linear', class_weight='balanced')  
             clf_parameters = {
-            'clf__C':(0.1,0.5,1,2,10,50,100),
+            'clf__C':(0.1,0.5,1,50),
             }
         else:
             print('Select a valid classifier \n')
@@ -296,10 +318,10 @@ class sentence_classification():
      def keyword_matching_model(self,tst_data):
         print('\n ***** Running Keyword Match Based Model ***** \n')                 
         predicted=[1 for i in range(0,len(tst_data))]
-        if os.path.isfile(self.path+'keywords.txt') and os.path.getsize(self.path+'keywords.txt') > 0:    
-            fk=open(self.path+'keywords.txt', "r") 
-            keywords = list(csv.reader(fk,delimiter='\n'))
-            keywords = [item for sublist in keywords for item in sublist]
+        if os.path.isfile(self.path+'keywords.txt') and os.path.getsize(self.path+'keywords.txt') > 0:                      
+            with open('keywords.txt', 'r', encoding='utf-8', errors='ignore') as fk:
+                 keywords = list(csv.reader(fk,delimiter='\n'))
+                 keywords = [item for sublist in keywords for item in sublist]
             fk.close()
         else:                                                  # If the keywords file does not exist or is empty then exit 
             print('Either keywords.txt does not exist or it is empty \n')
@@ -362,45 +384,45 @@ class sentence_classification():
          }     
 
 # BERT model    
-#     def bert_training_model(self,trn_data,trn_cat,test_size=0.2,max_length=512): 
-#        print('\n ***** Running BERT Model ***** \n')       
-#        tokenizer = BertTokenizerFast.from_pretrained(self.model_source, do_lower_case=True) 
-#        labels=np.asarray(trn_cat)     # Class labels in nparray format     
-#
-#        (train_texts, valid_texts, train_labels, valid_labels), class_names = train_test_split(trn_data, labels, test_size=test_size), trn_cat
-#        train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=max_length)
-#        valid_encodings = tokenizer(valid_texts, truncation=True, padding=True, max_length=max_length)
-#        train_dataset = get_torch_data_format(train_encodings, train_labels)
-#        valid_dataset = get_torch_data_format(valid_encodings, valid_labels)
-#        model = BertForSequenceClassification.from_pretrained(self.model_source, num_labels=len(class_names)).to("cpu")
-#        training_args = TrainingArguments(
-#            output_dir='./results',          # output directory
-#            num_train_epochs=3,              # total number of training epochs
-#            per_device_train_batch_size=16,  # batch size per device during training
-#            per_device_eval_batch_size=20,   # batch size for evaluation
-#            warmup_steps=500,                # number of warmup steps for learning rate scheduler
-#            weight_decay=0.01,               # strength of weight decay
-#            logging_dir='./logs',            # directory for storing logs
-#            load_best_model_at_end=True,     # load the best model when finished training (default metric is loss)
-#            logging_steps=200,               # log & save weights each logging_steps
-#            evaluation_strategy="steps",     # evaluate each `logging_steps`
-#            )    
-#        trainer = Trainer(
-#            model=model,                         # the instantiated Transformers model to be trained
-#            args=training_args,                  # training arguments, defined above
-#            train_dataset=train_dataset,         # training dataset
-#            eval_dataset=valid_dataset,          # evaluation dataset
-#            compute_metrics=self.compute_metrics,     # the callback that computes metrics of interest
-#            )
-#        print('\n Trainer done \n')
-#        trainer.train()
-#        print('\n Trainer train done \n')        
-#        trainer.evaluate()
-#        print('\n save model \n')
-#        model_path = self.path+"bert_model"
-#        model.save_pretrained(model_path)
-#        tokenizer.save_pretrained(model_path)
-#        return model,tokenizer,class_names
+     def bert_training_model(self,trn_data,trn_cat,test_size=0.2,max_length=512): 
+        print('\n ***** Running BERT Model ***** \n')       
+        tokenizer = BertTokenizerFast.from_pretrained(self.model_source, do_lower_case=True) 
+        labels=np.asarray(trn_cat)     # Class labels in nparray format     
+
+        (train_texts, valid_texts, train_labels, valid_labels), class_names = train_test_split(trn_data, labels, test_size=test_size), trn_cat
+        train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=max_length)
+        valid_encodings = tokenizer(valid_texts, truncation=True, padding=True, max_length=max_length)
+        train_dataset = get_torch_data_format(train_encodings, train_labels)
+        valid_dataset = get_torch_data_format(valid_encodings, valid_labels)
+        model = BertForSequenceClassification.from_pretrained(self.model_source, num_labels=len(class_names)).to("cpu")
+        training_args = TrainingArguments(
+            output_dir='./results',          # output directory
+            num_train_epochs=3,              # total number of training epochs
+            per_device_train_batch_size=16,  # batch size per device during training
+            per_device_eval_batch_size=20,   # batch size for evaluation
+            warmup_steps=500,                # number of warmup steps for learning rate scheduler
+            weight_decay=0.01,               # strength of weight decay
+            logging_dir='./logs',            # directory for storing logs
+            load_best_model_at_end=True,     # load the best model when finished training (default metric is loss)
+            logging_steps=200,               # log & save weights each logging_steps
+            evaluation_strategy="steps",     # evaluate each `logging_steps`
+            )    
+        trainer = Trainer(
+            model=model,                         # the instantiated Transformers model to be trained
+            args=training_args,                  # training arguments, defined above
+            train_dataset=train_dataset,         # training dataset
+            eval_dataset=valid_dataset,          # evaluation dataset
+            compute_metrics=self.compute_metrics,     # the callback that computes metrics of interest
+            )
+        print('\n Trainer done \n')
+        trainer.train()
+        print('\n Trainer train done \n')        
+        trainer.evaluate()
+        print('\n save model \n')
+        model_path = self.path+"bert_model"
+        model.save_pretrained(model_path)
+        tokenizer.save_pretrained(model_path)
+        return model,tokenizer,class_names
 
 # Classification using the Gold Statndard after creating it from the raw text    
      def sentence_classification(self):
@@ -412,7 +434,8 @@ class sentence_classification():
         rel_sent = list(csv.reader(fp,delimiter='\n')) 
         irl_sent = list(csv.reader(fn,delimiter='\n'))
         fp.close()
-        fn.close()
+        
+        
         print('\n ***** Processing Training Documents ***** \n')
     # Getting Relevant Sentences of Training Corpus
         for item in rel_sent:
@@ -469,7 +492,6 @@ class sentence_classification():
                 if item.find('.pdf')>0:             # Checking if it is a PDF file 
                     count+=1
                     tst_data=[]; tst_data_cleaned=[]; tst_vec=[]; tst_sentences=[] 
-                    print(item.lower().rstrip('.pdf'))
                     out = open(self.path+'output/'+item.lower().rstrip('.pdf')+'.txt',"w")   # Output file 
                     text=self.pdf_to_text(self.path+'test_data/'+item) 
                     text=self.text_refinement(text)                     # Cleaning text file
@@ -515,25 +537,30 @@ class sentence_classification():
                             cl=class_names[probs.argmax()]
                             predicted.append(cl)                            
                     elif self.model=='keyword_matching':
-                        out.write('\n Following Keyword Match \n\n') 
-                        predicted=self.keyword_matching_model(tst_data_cleaned)
+                        try:
+                            out.write('\n Following Keyword Match \n\n') 
+                            predicted=self.keyword_matching_model(tst_data_cleaned)
+                        except:
+                            out.write('\n No relevat sentence is found \n\n')
                     else:
                         print('Error!!! Please select a valid model \n')
                         sys.exit(0)                                  
                     out.write('Total No. of Sentences in Test Sample: '+str(p3)+'\n\n')
                     out.write('The relevant sentences are as follow: \n')
                     nps=0
-                    for i in range(0,len(predicted)):
-         # Check if there is a floating point number                 
-                        if predicted[i] == 0 and re.findall(r'\d+\.\d+', tst_data[i])!=[]:
-                            nps=nps+1                 
-                            tst_data[i]=re.sub(r'(\d+\.\d+°*)(\s*\�\s*)(\d+\.\d+)', r'\1 ± \3',tst_data[i]) # SHIFT+OPTION+PLUS Sign - plus-minus symbol
-                            out.write('\n'+str(nps)+")  "+tst_data[i]+'\n')               
+                    try:
+                        for i in range(0,len(predicted)):
+             # Check if there is a floating point number                 
+                            if predicted[i] == 0 and re.findall(r'\d+\.\d+', tst_data[i])!=[]:
+                                nps=nps+1                 
+                                tst_data[i]=re.sub(r'(\d+\.\d+°*)(\s*\�\s*)(\d+\.\d+)', r'\1 ± \3',tst_data[i]) # SHIFT+OPTION+PLUS Sign - plus-minus symbol
+                                out.write('\n'+str(nps)+")  "+tst_data[i]+'\n')  
+    #                        else:
+    #                            print('\n'+tst_data[i]+'\n ************************')
+                    except:
+                        pd=[]
                     print("Total No. of Relevant Sentences of "+item+" : %d\n" %nps)
             
             print('No of sentences belong to RELEVANT class of the training corpus: '+ str(p1)) 
             print('No of sentences belong to IRRELEVANT class of the training corpus: '+ str(p2)) 
             print('No of sentences belong to the TEST corpus: '+ str(p3)) 
-        
-    
-        
