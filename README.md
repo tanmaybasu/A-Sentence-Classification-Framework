@@ -4,7 +4,7 @@ The aim of this project is to build a framework to extract sentences from releva
 ## Prerequisites
 The following libraries have to be installed one by one before running the code, if they are not already installed. `For Fitz and PyMuPDF`, install Fitz first and then PyMuPDF. PyPDF2 is given in case Fitz is not working, otherwise it's not needed.
 
-[Fitz](https://pypi.org/project/fitz/), [PyMuPDF](https://pypi.org/project/PyMuPDF/), [PyPDF2](https://pypi.org/project/PyPDF2/)[Gensim](https://github.com/RaRe-Technologies/gensim), [NLTK](https://www.nltk.org/install.html), [NumPy](https://numpy.org/install/), [Python 3.7 or later version](https://www.python.org/downloads/), [Scikit-Learn](https://scikit-learn.org/0.16/install.html), [Torch](https://pypi.org/project/torch/), [Transformers](https://pypi.org/project/transformers/)
+[Fitz](https://pypi.org/project/fitz/), [PyMuPDF](https://pypi.org/project/PyMuPDF/), [PyPDF2](https://pypi.org/project/PyPDF2/), [Gensim](https://github.com/RaRe-Technologies/gensim), [NLTK](https://www.nltk.org/install.html), [NumPy](https://numpy.org/install/), [Python 3.7 or later version](https://www.python.org/downloads/), [Scikit-Learn](https://scikit-learn.org/0.16/install.html), [Torch](https://pypi.org/project/torch/), [Transformers](https://pypi.org/project/transformers/)
 
 ## How to run the framework?
 
