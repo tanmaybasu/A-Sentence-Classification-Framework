@@ -2,10 +2,11 @@
 The aim of this project is to build a framework to extract sentences from relevant literature of radiotherapy. The framework builds a training corpus by extracting sentences containing different data elements of geometric errors of radiotherapy from relevant publications by using some keywords fixed by the domain expert. Subsequently, the method trains a machine learning classifier e.g., Support Vector Machine using the training corpus to extract the sentences containing desired geometric errors from test documents. The experiments are conducted on 60 publications to automatically extract the sentences containing geometric errors of radiotherapy.  Read the [paper](https://www.mdpi.com/2078-2489/12/4/139/htm) for more information.
 
 ## Prerequisites
-The following libraries have to be installed one by one before running the code, if they are not already installed. `For Fitz and PyMuPDF`, install Fitz first and then PyMuPDF. PyPDF2 is given in case Fitz is not working, otherwise it's not needed.
+The following libraries have to be installed one by one before running the code, if they are not already installed. 
 
 [Fitz](https://pypi.org/project/fitz/), [PyMuPDF](https://pypi.org/project/PyMuPDF/), [PyPDF2](https://pypi.org/project/PyPDF2/), [Gensim](https://github.com/RaRe-Technologies/gensim), [NLTK](https://www.nltk.org/install.html), [NumPy](https://numpy.org/install/), [Python 3.7 or later version](https://www.python.org/downloads/), [Scikit-Learn](https://scikit-learn.org/0.16/install.html), [Torch](https://pypi.org/project/torch/), [Transformers](https://pypi.org/project/transformers/)
 
+`For Fitz and PyMuPDF`, install Fitz first and then PyMuPDF. PyPDF2 is given in case Fitz is not working, otherwise it's not needed.
 ## How to run the framework?
 
 Pass the path of the project e.g., `/home/xyz/sentence_classification/` as a parameter of the main class in `sentence_classification.py`. Create the following directories inside this path: 1) `training_data`, 2) `test_data`. Therefore keep the individual PDFs of training and test data in the respective directories. The list of keywords to build the training data should be stored as `keywords.txt` in the main project path. Create a directory, called, `output` in the main project path to store the outputs of individual test samples. 
