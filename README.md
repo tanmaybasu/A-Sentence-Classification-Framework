@@ -52,14 +52,14 @@ For any further query, comment or suggestion, you may reach out to me at welcome
 
 ## Citation
 ```
-@article{tcpnet24,
-  title={},
-  author={},
-  journal={},
-  volume={},
-  number={},
-  pages={},
-  year={},
-  publisher={}
+@article{basu21sent,
+  title={A sentence classification framework to identify geometric errors in radiation therapy from relevant literature},
+  author={Basu, Tanmay and Goldsworthy, Simon and Gkoutos, Georgios V},
+  journal={Information},
+  volume={12},
+  number={4},
+  pages={139},
+  year={2021},
+  publisher={MDPI}
 }
 ```
